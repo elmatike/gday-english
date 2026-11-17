@@ -1,0 +1,12 @@
+# Datos personales: nunca se publican
+data/
+# Servidor local de Python (Vercel solo publica la página)
+server.py
+collection.py
+tatoeba.py
+__pycache__/
+*.pyc
+# La extensión se instala desde la carpeta local
+extension/
+_ext_test/
+.DS_Store

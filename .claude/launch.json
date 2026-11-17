@@ -1,0 +1,1 @@
+{ "version": "0.0.1", "configurations": [ { "name": "gday", "runtimeExecutable": "python3", "runtimeArgs": ["server.py"], "port": 5190 } ] }

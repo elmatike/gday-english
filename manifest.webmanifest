@@ -1,0 +1,10 @@
+{
+  "name": "G'day · inglés hablado",
+  "short_name": "G'day",
+  "lang": "es",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0710",
+  "theme_color": "#0a0710",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

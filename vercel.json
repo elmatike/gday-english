@@ -1,0 +1,42 @@
+{
+  "builds": [
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "gday_core.py",
+          "gday_auth.py",
+          "dict/**"
+        ],
+        "excludeFiles": "{data/**,extension/**,vendor/**,server.py,collection.py,*.js,*.html,*.css,*.svg,*.webmanifest,_ext_test/**}",
+        "maxDuration": 60
+      }
+    },
+    {
+      "src": "*.{html,js,css,svg,webmanifest}",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "vendor/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "gday-extension.zip",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/sw.js",
+      "headers": {
+        "Cache-Control": "no-cache"
+      },
+      "continue": true
+    },
+    {
+      "src": "/api/(dict|search|subs|resolve|ping|transcribe|translate|auth)",
+      "dest": "/api/$1.py"
+    }
+  ]
+}

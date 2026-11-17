@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "G'day · subtítulos para aprender inglés",
+  "short_name": "G'day",
+  "version": "1.4.0",
+  "description": "Subtítulos dobles e interactivos en Netflix, YouTube, Prime Video, Disney+, Max, Crunchyroll y más. Tocá una palabra para traducirla y guardarla en G'day, o agregá de un toque las palabras más útiles del episodio para tu nivel.",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://gday-english.vercel.app/*",
+    "https://gday.app/*",
+    "https://www.gday.app/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "hook.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://gday-english.vercel.app/*",
+        "https://gday.app/*",
+        "https://www.gday.app/*",
+        "http://localhost:5190/*",
+        "http://127.0.0.1:5190/*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

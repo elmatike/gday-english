@@ -1,0 +1,14 @@
+# Secretos: nunca se suben
+.vercel
+.env*
+data/.secret
+data/google-oauth.json
+
+# Datos grandes que se vuelven a descargar (Tatoeba, >100 MB)
+data/tatoeba/
+
+# Basura del sistema y de Python
+.DS_Store
+__pycache__/
+*.pyc
+_ext_test/

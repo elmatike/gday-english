@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+:root { --bg:#0a0710; --s:#15101f; --s2:#1e1730; --line:#2c2244; --t:#f1ecfb; --m:#9a8fb5; --v:#8b5cf6; --v2:#c4b5fd; --ok:#5eead4; --miss:#fb7185; }
+* { box-sizing: border-box; margin: 0; }
+body { width: 360px; background: var(--bg); color: var(--t); font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 14px; }
+h1 { font-size: 20px; letter-spacing: -.5px; } h1 span { color: var(--v); }
+h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.3px; color: var(--m); margin: 16px 0 8px; }
+.top { display: flex; justify-content: space-between; align-items: center; }
+.power { display: flex; align-items: center; gap: 8px; background: var(--s2); border: 1px solid var(--line); border-radius: 99px; padding: 5px 12px 5px 6px; color: var(--t); font: 600 12px -apple-system, sans-serif; cursor: pointer; }
+.power i { width: 34px; height: 20px; border-radius: 99px; background: #3a3150; position: relative; transition: background .2s; }
+.power i::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left .2s; }
+.power.on { border-color: var(--v); } .power.on i { background: var(--v); } .power.on i::after { left: 17px; }
+.status { display: flex; justify-content: flex-end; margin-top: 8px; }
+body.off .tabs, body.off .tab, body.off #here { opacity: .45; pointer-events: none; }
+.pill { font-size: 11px; padding: 4px 9px; border-radius: 99px; background: var(--s2); border: 1px solid var(--line); }
+.pill.ok { color: var(--ok); } .pill.off { color: var(--miss); }
+.card { background: var(--s); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-top: 10px; }
+.card p { color: var(--m); font-size: 12px; }
+.card b { color: var(--t); }
+label.row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #ffffff08; }
+label.row:last-child { border: 0; }
+input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--v); }
+select, input[type=color] { background: var(--s2); color: var(--t); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; font: inherit; }
+input[type=range] { accent-color: var(--v); width: 120px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; background: var(--s2); color: var(--v2); border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font: inherit; cursor: pointer; text-decoration: none; }
+.btn.pri { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; border: 0; }
+.btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+ul { list-style: none; padding: 0; max-height: 220px; overflow-y: auto; }
+li { padding: 7px 0; border-bottom: 1px solid #ffffff0d; display: flex; gap: 8px; }
+li div { flex: 1; } li small { display: block; color: var(--m); font-size: 11px; }
+li .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); margin-top: 6px; flex: none; }
+li .dot.no { background: var(--m); }
+li button { background: none; border: 0; color: var(--m); cursor: pointer; font-size: 15px; }
+.keys input { width: 46px; text-align: center; background: var(--s2); color: var(--v2); border: 1px solid var(--line); border-radius: 6px; padding: 3px; font: 12px monospace; cursor: pointer; }
+.keys input:focus { outline: 2px solid var(--v); }
+kbd { background: var(--s2); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; font: 11px monospace; color: var(--v2); }
+.keys { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 12px; color: var(--m); }
+.tabs { display: flex; gap: 4px; margin-top: 12px; }
+.tabs button { flex: 1; background: var(--s); border: 1px solid var(--line); color: var(--m); border-radius: 9px; padding: 7px; font: inherit; cursor: pointer; }
+.tabs button.on { color: var(--t); background: var(--s2); border-color: var(--v); }
+.tab { display: none; } .tab.on { display: block; }
+</style>
+</head>
+<body>
+  <div class="top"><h1>G'day<span>.</span></h1><button id="power" class="power" title="Encender o apagar la extensión en todos los sitios"><i></i><b id="powerTxt">Encendida</b></button></div>
+  <div class="status"><span class="pill" id="server">G'day…</span></div>
+  <div class="card" id="here"><p>Buscando subtítulos en esta pestaña…</p></div>
+  <div class="tabs"><button data-tab="t1" class="on">Ajustes</button><button data-tab="t2">Libreta</button><button data-tab="t3">Atajos</button></div>
+
+  <div class="tab on" id="t1">
+    <div class="card">
+      <label class="row"><span>Extensión activada</span><input type="checkbox" data-c="enabled"></label>
+      <label class="row"><span>Activada en <b id="site">este sitio</b></span><input type="checkbox" id="siteOn"></label>
+    </div>
+    <h2>Subtítulos</h2>
+    <div class="card">
+      <label class="row"><span>Idioma que aprendés</span><select data-c="primary"><option value="en">Inglés</option><option value="es">Español</option><option value="pt">Portugués</option><option value="fr">Francés</option><option value="it">Italiano</option><option value="de">Alemán</option><option value="ja">Japonés</option></select></label>
+      <label class="row"><span>Tu idioma (traducción)</span><select data-c="secondary"><option value="es">Español</option><option value="en">Inglés</option><option value="pt">Portugués</option></select></label>
+      <label class="row"><span>Mostrar subtítulo en inglés</span><input type="checkbox" data-c="showPrimary"></label>
+      <label class="row"><span>Subtítulos en español</span><select id="trMode"><option value="show">Visibles</option><option value="blur">Difuminados (se ven al pasar el mouse)</option><option value="hide">Ocultos</option></select></label>
+      <label class="row"><span>Ocultar los subtítulos del sitio</span><input type="checkbox" data-c="hideNative"></label>
+    </div>
+    <h2>Modos de estudio</h2>
+    <div class="card">
+      <label class="row"><span>Subtítulos solo al pausar (entrenar el oído)</span><input type="checkbox" data-c="onlyOnPause"></label>
+      <label class="row"><span>Shadowing: pausa al final de cada frase</span><input type="checkbox" data-c="autoPause"></label>
+      <label class="row"><span>Repetir cada frase</span><select data-c="loopCount" data-num><option value="1">No repetir</option><option value="2">2 veces</option><option value="3">3 veces</option><option value="5">5 veces</option></select></label>
+      <label class="row"><span>Velocidad del botón “Lento”</span><select data-c="slowRate" data-num><option value="0.5">0,5x</option><option value="0.6">0,6x</option><option value="0.7">0,7x</option><option value="0.8">0,8x</option></select></label>
+      <label class="row"><span>Velocidad al abrir un video</span><select data-c="defaultRate" data-num><option value="0.75">0,75x</option><option value="0.85">0,85x</option><option value="1">Normal</option><option value="1.25">1,25x</option></select></label>
+    </div>
+    <h2>Buscar palabras</h2>
+    <div class="card">
+      <label class="row"><span>Buscar</span><select data-c="lookup"><option value="hover">Al pasar el mouse</option><option value="click">Al hacer clic</option></select></label>
+      <label class="row"><span>Espera al pasar el mouse</span><select data-c="hoverDelay" data-num><option value="0">Nada</option><option value="180">Corta</option><option value="400">Media</option><option value="800">Larga</option></select></label>
+      <label class="row"><span>Cuadro completo (si no, solo la traducción y "Ya la sé")</span><input type="checkbox" data-c="fullPop"></label>
+      <label class="row"><span>Pausar el video al buscar</span><input type="checkbox" data-c="pauseOnLookup"></label>
+      <label class="row"><span>Seguir reproduciendo al cerrar</span><input type="checkbox" data-c="resumeAfter"></label>
+      <label class="row"><span>Diccionario externo</span><select data-c="dictSite"><option value="wordreference">WordReference</option><option value="cambridge">Cambridge</option><option value="spanishdict">SpanishDict</option><option value="linguee">Linguee</option><option value="google">Google Traductor</option><option value="urban">Urban Dictionary (jerga)</option></select></label>
+      <label class="row"><span>Botón YouGlish (escucharla en videos reales)</span><input type="checkbox" data-c="showYouglish"></label>
+      <label class="row"><span>Traducir al español los subtítulos que no lo tienen</span><input type="checkbox" data-c="autoTranslate"></label>
+      <label class="row"><span>Traducir con doble clic en cualquier página</span><input type="checkbox" data-c="pageTranslate"></label>
+    </div>
+    <h2>Colores de las palabras</h2>
+    <div class="card">
+      <label class="row"><span>Marcar las que estoy aprendiendo</span><input type="checkbox" data-c="wordColors"></label>
+      <label class="row"><span>Color de “aprendiendo”</span><input type="color" data-c="colorLearning"></label>
+      <label class="row"><span>Marcar las que ya sé</span><input type="checkbox" data-c="showKnown"></label>
+      <label class="row"><span>Color de “ya la sé”</span><input type="color" data-c="colorKnown"></label>
+      <div class="btns"><button class="btn" id="clearKnown">Olvidar las palabras marcadas como sabidas</button></div>
+    </div>
+    <h2>Apariencia</h2>
+    <div class="card">
+      <label class="row"><span>Posición</span><select data-c="position"><option value="bottom">Abajo</option><option value="top">Arriba</option></select></label>
+      <label class="row"><span>Distancia al borde</span><input type="range" min="2" max="45" data-c="pos"></label>
+      <label class="row"><span>Tamaño</span><input type="range" min="50" max="220" data-c="size"></label>
+      <label class="row"><span>Tipografía</span><select data-c="font"><option value="system">Del sistema</option><option value="rounded">Redondeada</option><option value="serif">Con serifa</option><option value="mono">Monoespaciada</option><option value="dyslexic">Para dislexia</option></select></label>
+      <label class="row"><span>Estilo</span><select data-c="textStyle"><option value="box">Con fondo</option><option value="outline">Solo contorno</option></select></label>
+      <label class="row"><span>Color del inglés</span><input type="color" data-c="color"></label>
+      <label class="row"><span>Color de la traducción</span><input type="color" data-c="color2"></label>
+      <label class="row"><span>Color del fondo</span><input type="color" data-c="bgColor"></label>
+      <label class="row"><span>Opacidad del fondo</span><input type="range" min="0" max="100" data-c="bgAlpha"></label>
+    </div>
+    <h2>Voz</h2>
+    <div class="card">
+      <label class="row"><span>Voz para leer</span><select data-c="ttsVoice" id="voices"><option value="">Automática (australiana si hay)</option></select></label>
+      <label class="row"><span>Velocidad de la voz</span><input type="range" min="0.5" max="1.3" step="0.05" data-c="ttsRate"></label>
+    </div>
+    <h2>Libreta</h2>
+    <div class="card">
+      <label class="row"><span>Guardar cada palabra que busco</span><input type="checkbox" data-c="autoSave"></label>
+      <label class="row"><span>Pasarlas a mis tarjetas de G'day</span><input type="checkbox" data-c="sendToGday"></label>
+      <label class="row"><span>Mazo de G'day</span><input type="text" data-c="deckName" style="width:150px;background:var(--s2);color:var(--t);border:1px solid var(--line);border-radius:8px;padding:5px 7px;font:inherit"></label>
+    </div>
+    <div class="btns" style="margin-top:12px"><button class="btn" id="resetCfg">Volver a los ajustes de fábrica</button></div>
+  </div>
+
+  <div class="tab" id="t2">
+    <div class="btns"><button class="btn" id="export">Exportar para Anki (.txt)</button><button class="btn" id="sync">Pasar pendientes a G'day</button><a class="btn" href="https://gday-english.vercel.app/#cards" target="_blank">Abrir G'day</a></div>
+    <p style="color:var(--m);font-size:11px;margin-top:8px">El punto verde indica que la palabra ya está en tus tarjetas de G'day, en el mazo “Palabras de videos”.</p>
+    <ul id="words"></ul>
+  </div>
+
+  <div class="tab" id="t3">
+    <p style="color:var(--m);font-size:12px;margin:10px 0">Tocá un casillero y apretá la tecla que quieras usar.</p>
+    <div class="card keys" id="keys"></div>
+    <div class="card"><p>Pasá el mouse sobre una palabra para traducirla. Seleccioná varias palabras para traducir la frase. En cualquier página web, hacé doble clic sobre una palabra. <kbd>Esc</kbd> cierra la palabra.</p></div>
+  </div>
+<script src="popup.js"></script>
+</body>
+</html>
