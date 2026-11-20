@@ -14,7 +14,7 @@
       }
     },
     {
-      "src": "*.{html,js,css,svg,webmanifest}",
+      "src": "*.{html,js,css,svg,webmanifest,txt,xml,png}",
       "use": "@vercel/static"
     },
     {
